@@ -80,5 +80,5 @@ int main() {
     shipX = shipY = 0;
     for(int i = 0; i < 5; i++)
         targets.push_back({W-1, rand()%H});
-    run(20, update, keypress);
+    toybox_run(20, update, keypress);
 }

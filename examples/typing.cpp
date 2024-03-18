@@ -61,5 +61,5 @@ void keypress(int key) {
 int main() {
     srand(time(NULL)); // 初始化随机数生成器
     init_letters(); // 初始化字母数组
-    run(10, update, keypress); // 运行游戏
+    toybox_run(10, update, keypress); // 运行游戏
 }

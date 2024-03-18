@@ -100,5 +100,5 @@ void update() {
 
 // 主函数
 int main() {
-    run(20, render, keypress); // 假设 run 函数接受一个更新游戏状态的函数作为参数
+    toybox_run(20, render, keypress); // 假设 toybox_run 函数接受一个更新游戏状态的函数作为参数
 }

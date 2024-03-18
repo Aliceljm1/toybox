@@ -61,5 +61,5 @@ void keypress(int key) {
 }
 
 int main() {
-    run(20, update, keypress);
+    toybox_run(20, update, keypress);
 }

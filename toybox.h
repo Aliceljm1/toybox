@@ -22,8 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// toybox 只提供一个函数 void run(fps, update, keypress)
-// run 接收三个参数，然后进入死循环：
+// toybox 只提供一个函数 void toybox_run(fps, update, keypress)
+// toybox_run 接收三个参数，然后进入死循环：
 //
 // - 1. 整数 fps:
 //       每秒刷新的次数 (每秒执行 fps 次 update)
@@ -56,7 +56,7 @@
 typedef void (*draw_function)(int x, int y, char ch);
 
 static void
-run(int fps,
+toybox_run(int fps,
     void (*update)(int, int, draw_function draw),
     void (*keypress)(int));
 
@@ -201,7 +201,7 @@ void draw_(int x, int y, char ch) {
 }
 
 static void
-run(int fps,
+toybox_run(int fps,
     void (*update)(int, int, draw_function draw),
     void (*keypress)(int)) {
     uint64_t last_time = 0;

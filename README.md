@@ -5,7 +5,7 @@
 ```c
 #include "toybox.h"
 
-// run(fps, update, keypress)
+// toybox_run(fps, update, keypress)
 // - 进入游戏/动画主循环
 // - 每秒 fps 次调用 update(w, h, draw)
 // - 当任何时候有按键时，调用 keypress(key)
@@ -24,7 +24,7 @@ void keypress(int key) {
 }
 
 int main() {
-    run(20, update, keypress);
+    toybox_run(20, update, keypress);
 }
 ```
 
@@ -32,7 +32,7 @@ int main() {
 #include "toybox.h"
 
 int main() {
-    run(1, [](int w, int h, auto draw) {
+    toybox_run(1, [](int w, int h, auto draw) {
          static int t = 0;
         t++;
         for (int x = 0; x < w; x++) {
