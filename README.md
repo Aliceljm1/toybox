@@ -33,7 +33,7 @@ int main() {
 
 int main() {
     toybox_run(1, [](int w, int h, auto draw) {
-         static int t = 0;
+        static int t = 0;
         t++;
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
