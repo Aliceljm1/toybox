@@ -95,7 +95,7 @@ static int waitkey_(void) {
 static void get_window_size_(int *w, int *h) {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-        *w = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        *w = csbi.srWindow.Right - csbi.srWindow.Left;
         *h = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     } else {
         *w = 80;
