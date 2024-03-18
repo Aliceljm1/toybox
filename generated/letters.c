@@ -1,3 +1,5 @@
+// Author: GPT-4-turbo
+
 #include "toybox.h"
 #include <stdlib.h> // 用于 rand() 和 srand()
 #include <time.h>   // 用于 time()

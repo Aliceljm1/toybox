@@ -1,3 +1,5 @@
+// Author: GPT-4-turbo
+
 #include "toybox.h"
 #include <stdlib.h>
 #include <time.h>

@@ -1,3 +1,4 @@
+// toybox.h: C/C++ 初学者的第一个游戏 & 动画引擎
 //
 // MIT License
 // 
@@ -21,10 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-
-// toybox.h: C/C++ 初学者的第一个游戏 & 动画引擎
-// 
-// 它只有一个函数 void run(fps, update, keypress)，接收三个参数，进入循环：
+// toybox 只提供一个函数 void run(fps, update, keypress)
+// run 接收三个参数，然后进入死循环：
 //
 // - 1. 整数 fps:
 //       每秒刷新的次数 (每秒执行 fps 次 update)
