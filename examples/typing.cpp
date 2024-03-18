@@ -1,6 +1,6 @@
 // Author: GPT-4-turbo
 
-#include "toybox.h"
+#include "../toybox.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -23,7 +23,7 @@ void init_letters() {
 void spawn_letter(int w) {
     for (int i = 0; i < MAX_LETTERS; ++i) {
         if (!letters[i].active) {
-            letters[i].ch = 'A' + rand() % 26; // 随机选择一个字母
+            letters[i].ch = 'a' + rand() % 26; // 随机选择一个字母
             letters[i].x = rand() % w; // 随机选择一个横坐标
             letters[i].y = 0; // 从顶部开始掉落
             letters[i].active = true;

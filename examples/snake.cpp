@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
-#include "toybox.h"
+#include "../toybox.h"
 using namespace std;
 
 // 定义蛇的方向
