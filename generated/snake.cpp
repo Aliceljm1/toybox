@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <string>
