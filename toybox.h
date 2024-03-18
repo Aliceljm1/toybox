@@ -58,7 +58,7 @@ typedef void (*draw_function)(int x, int y, char ch);
 
 static void
 run(int fps,
-    void (*render)(int, int, draw_function draw),
+    void (*update)(int, int, draw_function draw),
     void (*keypress)(int));
 
 
@@ -181,7 +181,7 @@ void draw_(int x, int y, char ch) {
 
 static void
 run(int fps,
-    void (*render)(int, int, draw_function draw),
+    void (*update)(int, int, draw_function draw),
     void (*keypress)(int)) {
     uint64_t last_time = 0;
     int last_size = -1;
@@ -213,7 +213,7 @@ run(int fps,
         // 开始处理下一帧
         get_window_size_(&w_, &h_);
         memset(canvas_, ' ', sizeof(canvas_));
-        render(w_, h_, draw_);
+        update(w_, h_, draw_);
 
         char *head = buffer;
         append_(head, "\033[H");
