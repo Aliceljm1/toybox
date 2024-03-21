@@ -1,6 +1,7 @@
 // Author: GPT-4-turbo
 // Prompt: 帮我填写模板 (README.md)，实现一个函数 f(x) 的绘制和导航。
-//         给 f(x) = sin(x), f(x)=x^2，首先绘制出它在 [-1,1] [-1,1] 上的图像。
+//         给 f(x) = x, f(x) = sin(x), f(x) = sqrt(x)，
+//         绘制出它们在 [-1,1] [-1,1] 上的图像。
 //         w/a/s/d 按键可以移动坐标；z/x可以放大/缩小。 
 //         不同的函数用不同的mark；绘制出横竖坐标轴。
 
@@ -16,8 +17,9 @@ double scale = 10.0;   // 缩放级别，每个单位长度代表的像素点数
 // 函数原型
 void drawAxes(int w, int h, void (*draw)(int, int, char));
 void drawFunction(int w, int h, void (*draw)(int, int, char), double (*func)(double), char mark);
+double identityFunction(double x);
 double sinFunction(double x);
-double squareFunction(double x);
+double squareRootFunction(double x);
 
 void update(int w, int h, void (*draw)(int, int, char)) {
     // 清屏
@@ -31,14 +33,15 @@ void update(int w, int h, void (*draw)(int, int, char)) {
     drawAxes(w, h, draw);
 
     // 绘制函数
+    drawFunction(w, h, draw, identityFunction, '*');
     drawFunction(w, h, draw, sinFunction, '.');
-    drawFunction(w, h, draw, squareFunction, 'o');
+    drawFunction(w, h, draw, squareRootFunction, 'o');
 }
 
 void keypress(int key) {
     switch (key) {
-        case 'w': centerY -= 1.0 / scale; break;
-        case 's': centerY += 1.0 / scale; break;
+        case 's': centerY -= 1.0 / scale; break;
+        case 'w': centerY += 1.0 / scale; break;
         case 'a': centerX -= 1.0 / scale; break;
         case 'd': centerX += 1.0 / scale; break;
         case 'z': scale *= 1.1; break;  // 放大
@@ -76,12 +79,17 @@ void drawFunction(int w, int h, void (*draw)(int, int, char), double (*func)(dou
     }
 }
 
+
+double identityFunction(double x) {
+    return x;
+}
+
 double sinFunction(double x) {
     return sin(x);
 }
 
-double squareFunction(double x) {
-    return x * x;
+double squareRootFunction(double x) {
+    return sqrt(x);
 }
 
 int main() {
