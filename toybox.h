@@ -1,4 +1,3 @@
-
 //  _____         _           
 // |_   _|___ _ _| |_ ___ _ _ 
 //   | | | . | | | . | . |_'_|
@@ -51,25 +50,23 @@
 // - 3. 函数 keypress:
 //       void keypress(int key);
 //       每当收到按键时，keypress 会被调用，key 是按键的 ASCII 码
-
-#ifndef __TOYBOX_H__
-#define __TOYBOX_H__
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-
+//
+// -= Toybox API =-------------------------------------
 typedef void (*draw_function)(int x, int y, char ch);
 
 static void
 toybox_run(int fps,
     void (*update)(int, int, draw_function draw),
     void (*keypress)(int));
+// ----------------------------------------------------
 
+// 以下为 toybox.h 内部使用
 
-// 以下为 toybox.h 内部使用 (以下划线结尾)
-// ----------------------------------
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+
 #define MAX_W_ 128
 #define MAX_H_ 64
 static uint64_t start_time_;
@@ -263,5 +260,3 @@ toybox_run(int fps,
         fflush(stdout);
     }
 }
-
-#endif
