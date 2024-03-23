@@ -1,7 +1,7 @@
 // Author: Claude-3-Opus
 // With a few small bug fixes.
 
-#include "toybox.h"
+#include "../toybox.h"
 #include <cstdlib>
 #include <ctime>
 
