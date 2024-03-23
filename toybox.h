@@ -69,6 +69,13 @@ toybox_run(int fps,
 
 #define MAX_W_ 128
 #define MAX_H_ 64
+
+#define append_(buf, str) \
+    do { \
+        strcpy(buf, str); \
+        buf += strlen(str); \
+    } while (0)
+
 static uint64_t start_time_;
 static int w_, h_;
 static char canvas_[MAX_W_ * MAX_H_];
@@ -120,6 +127,23 @@ static int gettimeofday(struct timeval * tp, struct timezone * tzp)
     tp->tv_sec  = (long) ((time - EPOCH) / 10000000L);
     tp->tv_usec = (long) (system_time.wMilliseconds * 1000);
     return 0;
+}
+
+static void clear_screen_() {
+    COORD topLeft  = { 0, 0 };
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO screen;
+    DWORD written;
+
+    GetConsoleScreenBufferInfo(console, &screen);
+    FillConsoleOutputCharacterA(
+            console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+    );
+    FillConsoleOutputAttribute(
+            console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+            screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+    );
+    SetConsoleCursorPosition(console, topLeft);
 }
 
 #else
@@ -187,6 +211,10 @@ static void get_window_size_(int *w, int *h) {
     *h = win.ws_row < MAX_H_ ? win.ws_row : MAX_H_;
 }
 
+static void clear_screen_() {
+    append_(head, "\033[H");
+}
+
 #endif
 
 uint64_t timer_ms_(void) {
@@ -214,12 +242,6 @@ toybox_run(int fps,
     int i, last_size = -1;
     char buffer[MAX_W_ * MAX_H_ + MAX_H_ * 2 + 4096], *head;
 
-    #define append_(buf, str) \
-        do { \
-            strcpy(buf, str); \
-            buf += strlen(str); \
-        } while (0)
-
     while (1) {
         int key = waitkey_();
         if (key > 0) {
@@ -240,7 +262,7 @@ toybox_run(int fps,
         update(w_, h_, draw_);
 
         head = buffer;
-        append_(head, "\033[H");
+        clear_screen_();
 
         if ((w_ << 16) + h_ != last_size) {
             last_size = (w_ << 16) + h_;
