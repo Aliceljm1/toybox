@@ -212,7 +212,7 @@ static void get_window_size_(int *w, int *h) {
 }
 
 static void clear_screen_() {
-    append_(head, "\033[H");
+    printf("\033[H");
 }
 
 #endif
@@ -266,7 +266,7 @@ toybox_run(int fps,
 
         if ((w_ << 16) + h_ != last_size) {
             last_size = (w_ << 16) + h_;
-            printf("\033[2J");
+            append_(head, "\033[2J");
         }
 
         for (i = 0; i < h_; i++) {
