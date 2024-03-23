@@ -1,64 +1,66 @@
-//  _____         _           
-// |_   _|___ _ _| |_ ___ _ _ 
-//   | | | . | | | . | . |_'_|
-//   |_| |___|_  |___|___|_,_|
-//           |___|            
-//
-// C/C++ 初学者的第一个游戏 & 动画引擎
-//
-// MIT License
-// 
-// Copyright (c) 2024 by Yanyan Jiang and Zesen Liu
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
-// toybox 只提供一个函数 void toybox_run(fps, update, keypress)
-// toybox_run 接收三个参数，然后进入死循环：
-//
-// - 1. 整数 fps:
-//       每秒刷新的次数 (每秒执行 fps 次 update)
-//
-// - 2. 函数 update:
-//       void updpate(int w, int h, draw_function draw);
-//       每当时间到时，update 会被调用，其中可以调用 draw(x, y, ch);
-//       在坐标 (x, y) 绘制一个字符 ch。坐标系统：
-//
-//            (0,0) ---- x ---->
-//            |          |
-//            |          |
-//            |          |
-//            y ------ (x,y) = ch   //  draw(x, y, ch)
-//            |
-//            v
-//
-// - 3. 函数 keypress:
-//       void keypress(int key);
-//       每当收到按键时，keypress 会被调用，key 是按键的 ASCII 码
-//
-// -= Toybox API =-------------------------------------
+/*
+ *  _____         _           
+ * |_   _|___ _ _| |_ ___ _ _ 
+ *   | | | . | | | . | . |_'_|
+ *   |_| |___|_  |___|___|_,_|
+ *           |___|            
+ *
+ * C/C++ 初学者的第一个游戏 & 动画引擎
+ *
+ * MIT License
+ * 
+ * Copyright (c) 2024 by Yanyan Jiang and Zesen Liu
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * toybox 只提供一个函数 void toybox_run(fps, update, keypress)
+ * toybox_run 接收三个参数，然后进入死循环：
+ *
+ * - 1. 整数 fps:
+ *       每秒刷新的次数 (每秒执行 fps 次 update)
+ *
+ * - 2. 函数 update:
+ *       void updpate(int w, int h, draw_function draw);
+ *       每当时间到时，update 会被调用，其中可以调用 draw(x, y, ch);
+ *       在坐标 (x, y) 绘制一个字符 ch。坐标系统：
+ *
+ *            (0,0) ---- x ---->
+ *            |          |
+ *            |          |
+ *            |          |
+ *            y ------ (x,y) = ch   //  draw(x, y, ch)
+ *            |
+ *            v
+ *
+ * - 3. 函数 keypress:
+ *       void keypress(int key);
+ *       每当收到按键时，keypress 会被调用，key 是按键的 ASCII 码
+ */
+
+/* -= Toybox API =------------------------------------- */
 typedef void (*draw_function)(int x, int y, char ch);
 
 static void
 toybox_run(int fps,
     void (*update)(int, int, draw_function draw),
     void (*keypress)(int));
-// ----------------------------------------------------
+/* ---------------------------------------------------- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,6 +132,7 @@ static int gettimeofday(struct timeval * tp, struct timezone * tzp)
 static int waitkey_(void) {
     struct timeval timeout;
     fd_set readfds;
+    int retval;
 
     timeout.tv_sec = 0;
     timeout.tv_usec = 10000;
@@ -137,7 +140,7 @@ static int waitkey_(void) {
     FD_ZERO(&readfds);
     FD_SET(STDIN_FILENO, &readfds);
 
-    int retval = select(STDIN_FILENO + 1, &readfds, NULL, NULL, &timeout);
+    retval = select(STDIN_FILENO + 1, &readfds, NULL, NULL, &timeout);
     if (retval == -1) {
         exit(1);
     } if (retval) {
@@ -154,12 +157,13 @@ struct termios old_;
 static void __attribute__((constructor))
 termios_init_(void) {
     struct winsize win;
+    struct termios cur;
+
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &win) == -1) {
         printf("Not a terminal window.\n");
         exit(1);
     }
 
-    struct termios cur;
     tcgetattr(STDIN_FILENO, &old_);
 
     cur = old_;
@@ -207,8 +211,8 @@ toybox_run(int fps,
     void (*update)(int, int, draw_function draw),
     void (*keypress)(int)) {
     uint64_t last_time = 0;
-    int last_size = -1;
-    char buffer[MAX_W_ * MAX_H_ + MAX_H_ * 2 + 4096];
+    int i, last_size = -1;
+    char buffer[MAX_W_ * MAX_H_ + MAX_H_ * 2 + 4096], *head;
 
     #define append_(buf, str) \
         do { \
@@ -235,7 +239,7 @@ toybox_run(int fps,
         memset(canvas_, ' ', sizeof(canvas_));
         update(w_, h_, draw_);
 
-        char *head = buffer;
+        head = buffer;
         append_(head, "\033[H");
 
         if ((w_ << 16) + h_ != last_size) {
@@ -243,7 +247,7 @@ toybox_run(int fps,
             printf("\033[2J");
         }
 
-        for (int i = 0; i < h_; i++) {
+        for (i = 0; i < h_; i++) {
             if (i != 0) {
                 append_(head, "\r\n");
             }

@@ -15,8 +15,10 @@ typedef struct {
 Letter letters[MAX_LETTERS]; // 存储所有字母的数组
 
 void init_letters(int w, int h) {
+    int i;
+
     srand(time(NULL)); // 初始化随机数生成器
-    for (int i = 0; i < MAX_LETTERS; i++) {
+    for (i = 0; i < MAX_LETTERS; i++) {
         letters[i].x = rand() % w;
         letters[i].y = rand() % h;
         letters[i].dx = (rand() % 3) - 1; // -1, 0, 或 1
@@ -26,7 +28,9 @@ void init_letters(int w, int h) {
 }
 
 void update_letters(int w, int h) {
-    for (int i = 0; i < MAX_LETTERS; i++) {
+    int i;
+
+    for (i = 0; i < MAX_LETTERS; i++) {
         letters[i].x += letters[i].dx;
         letters[i].y += letters[i].dy;
 
@@ -44,6 +48,8 @@ void update_letters(int w, int h) {
 
 void update(int w, int h, draw_function draw) {
     static int initialized = 0;
+    int i;
+
     if (!initialized) {
         init_letters(w, h);
         initialized = 1;
@@ -51,7 +57,7 @@ void update(int w, int h, draw_function draw) {
 
     update_letters(w, h);
 
-    for (int i = 0; i < MAX_LETTERS; i++) {
+    for (i = 0; i < MAX_LETTERS; i++) {
         draw(letters[i].x, letters[i].y, letters[i].ch);
     }
 }
@@ -60,6 +66,6 @@ void keypress(int key) {
     // 按键处理（如果需要）
 }
 
-int main() {
+int main(void) {
     toybox_run(20, update, keypress);
 }
