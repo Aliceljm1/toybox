@@ -1,6 +1,8 @@
 # Toybox: C/C++ 初学者的第一个游戏 & 动画引擎
 
-请参考 toybox.h 头部的注释。C/C++ 都可以从以下模板开始，只需实现 “TODO” 中更新屏幕和响应按键逻辑 (可以不提供响应按键的 keypress) 即可：
+请参考 toybox.h 头部的注释和 hello.cpp 的例子。
+
+C/C++ 都可以从以下模板开始，只需实现 “TODO” 中更新屏幕和响应按键逻辑 (可以不提供响应按键的 keypress) 即可：
 
 ```c
 #include "toybox.h"

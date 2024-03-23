@@ -60,8 +60,6 @@ toybox_run(int fps,
     void (*keypress)(int));
 // ----------------------------------------------------
 
-// 以下为 toybox.h 内部使用
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,8 +70,8 @@ toybox_run(int fps,
 static uint64_t start_time_;
 static int w_, h_;
 static char canvas_[MAX_W_ * MAX_H_];
-static int waitkey_(void);  // 等待一个按键 (返回按键 ASCII 码) 10ms
-static void get_window_size_(int *w, int *h);  // 获取命令行终端大小
+static int waitkey_(void);
+static void get_window_size_(int *w, int *h);
 
 #ifdef _WIN32
 #include <windows.h>
@@ -221,13 +219,11 @@ toybox_run(int fps,
     while (1) {
         int key = waitkey_();
         if (key > 0) {
-            // 有按键，响应按键
             if (keypress) {
                 keypress(key);
             }
             continue;
         } else {
-            // 无按键且下一帧时间未到，需要继续等待
             uint64_t t = timer_ms_() - start_time_;
             if (t - last_time <= 1000 / fps) {
                 continue;
@@ -235,7 +231,6 @@ toybox_run(int fps,
             last_time = t;
         }
 
-        // 开始处理下一帧
         get_window_size_(&w_, &h_);
         memset(canvas_, ' ', sizeof(canvas_));
         update(w_, h_, draw_);
